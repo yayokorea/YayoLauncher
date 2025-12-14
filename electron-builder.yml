@@ -1,5 +1,5 @@
 appId: 'yayolauncher'
-productName: 'YayoLauncher'
+productName: 'Yayo Launcher'
 artifactName: 'YayoLauncher-setup-${version}.${ext}'
 
 copyright: 'Copyright © 2024 Yayo'
