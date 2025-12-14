@@ -1,13 +1,13 @@
 {
-  "name": "mrslauncher",
+  "name": "yayolauncher",
   "version": "3.0.8",
-  "productName": "MRS Launcher",
+  "productName": "YayoLauncher",
   "description": "Modded Minecraft Launcher",
-  "author": "Daniel Scalzi (https://github.com/dscalzi/), peunsu (https://github.com/peunsu)",
+  "author": "Yayo",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/peunsu/MRSLauncher",
+  "homepage": "https://yayokorea.net",
   "bugs": {
-    "url": "https://github.com/peunsu/MRSLauncher/issues"
+    "url": "https://github.com/yayokorea/YayoLauncher/issues"
   },
   "private": true,
   "main": "index.js",
@@ -46,6 +46,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peunsu/MRSLauncher.git"
+    "url": "git+https://github.com/yayokorea/YayoLauncher.git"
   }
 }
