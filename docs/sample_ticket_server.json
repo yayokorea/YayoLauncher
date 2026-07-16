@@ -1,0 +1,44 @@
+{
+    "id": "production-26.2",
+    "name": "Yayo 26.2 Server",
+    "description": "YayoLauncher authenticated Paper server",
+    "icon": "https://files.example.com/server-icon.png",
+    "version": "1.0.0",
+    "address": "play.example.com",
+    "minecraftVersion": "26.2",
+    "mainServer": true,
+    "autoconnect": true,
+    "ticketAuth": {
+        "apiBaseUrl": "https://auth.example.com"
+    },
+    "javaOptions": {
+        "supported": ">=25",
+        "suggestedMajor": 25
+    },
+    "modules": [
+        {
+            "id": "net.fabricmc:fabric-loader:0.19.3",
+            "name": "Fabric Loader",
+            "type": "Fabric",
+            "artifact": {
+                "size": 0,
+                "SHA256": "GENERATE_WITH_NEBULA",
+                "url": "https://files.example.com/fabric-loader.jar"
+            }
+        },
+        {
+            "id": "net.yayokorea:yayo-auth-client:1.0.0",
+            "name": "Yayo Server Authentication",
+            "type": "FabricMod",
+            "required": {
+                "value": true,
+                "def": true
+            },
+            "artifact": {
+                "size": 0,
+                "SHA256": "REPLACE_WITH_BUILD_ARTIFACT_HASH",
+                "url": "https://files.example.com/mods/yayo-auth-client-1.0.0.jar"
+            }
+        }
+    ]
+}

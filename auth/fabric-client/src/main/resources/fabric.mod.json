@@ -1,0 +1,20 @@
+{
+    "schemaVersion": 1,
+    "id": "yayo_auth",
+    "version": "${version}",
+    "name": "Yayo Server Authentication",
+    "description": "One-time admission ticket client for YayoLauncher servers.",
+    "authors": ["Yayo"],
+    "license": "MIT",
+    "environment": "client",
+    "entrypoints": {
+        "main": ["net.yayokorea.auth.fabric.YayoAuthMod"],
+        "client": ["net.yayokorea.auth.fabric.YayoAuthClient"]
+    },
+    "depends": {
+        "fabricloader": ">=0.19.3",
+        "minecraft": "~26.2",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
+}

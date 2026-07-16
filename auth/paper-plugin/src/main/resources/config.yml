@@ -1,0 +1,5 @@
+server-id: production-26.2
+ticket-api-url: https://auth.example.com
+paper-service-token: change-me-with-at-least-32-random-characters
+authentication-timeout-ticks: 200
+kick-message: YayoLauncher 인증에 실패했습니다. 런처에서 다시 접속해 주세요.

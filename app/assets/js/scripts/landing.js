@@ -30,6 +30,7 @@ const {
 // Internal Requirements
 const DiscordWrapper          = require('./assets/js/discordwrapper')
 const ProcessBuilder          = require('./assets/js/processbuilder')
+const { TicketBroker }        = require('./assets/js/ticketbroker')
 
 // Launch Elements
 const launch_content          = document.getElementById('launch_content')
@@ -437,6 +438,7 @@ async function downloadJava(effectiveJavaOptions, launchAfter = true) {
 
 // Keep reference to Minecraft Process
 let proc
+let ticketBroker
 // Is DiscordRPC enabled
 let hasRPC = false
 // Joined server regex
@@ -554,7 +556,30 @@ async function dlAsync(login = true) {
     if(login) {
         const authUser = ConfigManager.getSelectedAccount()
         loggerLaunchSuite.info(`Sending selected account (${authUser.displayName}) to ProcessBuilder.`)
-        let pb = new ProcessBuilder(serv, versionData, modLoaderData, authUser, remote.app.getVersion())
+        let launchEnvironment = {}
+        let pb
+        try {
+            const ticketAuth = serv.rawServer.ticketAuth
+            if(ticketAuth?.apiBaseUrl) {
+                ticketBroker = new TicketBroker({
+                    apiBaseUrl: ticketAuth.apiBaseUrl,
+                    accessToken: authUser.accessToken,
+                    accountUuid: authUser.uuid,
+                    serverId: serv.rawServer.id
+                })
+                launchEnvironment = await ticketBroker.start()
+                loggerLaunchSuite.info('Started the local one-time ticket broker.')
+            }
+            pb = new ProcessBuilder(serv, versionData, modLoaderData, authUser, remote.app.getVersion(), launchEnvironment)
+        } catch(err) {
+            if(ticketBroker != null) {
+                await ticketBroker.close()
+                ticketBroker = null
+            }
+            loggerLaunchSuite.error('Unable to initialize server ticket authentication.', err)
+            showLaunchFailure(Lang.queryJS('landing.dlAsync.errorDuringLaunchTitle'), Lang.queryJS('landing.dlAsync.checkConsoleForDetails'))
+            return
+        }
         setLaunchDetails(Lang.queryJS('landing.dlAsync.launchingGame'))
 
         // const SERVER_JOINED_REGEX = /\[.+\]: \[CHAT\] [a-zA-Z0-9_]{1,16} joined the game/
@@ -608,6 +633,14 @@ async function dlAsync(login = true) {
             // Build Minecraft process.
             proc = pb.build()
 
+            proc.once('close', () => {
+                if(ticketBroker != null) {
+                    ticketBroker.close().catch(err => loggerLaunchSuite.warn('Failed to close ticket broker.', err))
+                    ticketBroker = null
+                }
+                proc = null
+            })
+
             // Bind listeners to stdout.
             proc.stdout.on('data', tempListener)
             proc.stderr.on('data', gameErrorListener)
@@ -622,11 +655,15 @@ async function dlAsync(login = true) {
                     loggerLaunchSuite.info('Shutting down Discord Rich Presence..')
                     DiscordWrapper.shutdownRPC()
                     hasRPC = false
-                    proc = null
                 })
             }
 
         } catch(err) {
+
+            if(ticketBroker != null) {
+                await ticketBroker.close()
+                ticketBroker = null
+            }
 
             loggerLaunchSuite.error('Error during launch', err)
             showLaunchFailure(Lang.queryJS('landing.dlAsync.errorDuringLaunchTitle'), Lang.queryJS('landing.dlAsync.checkConsoleForDetails'))

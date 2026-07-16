@@ -17,7 +17,8 @@
         "dist:win": "cross-env NODE_OPTIONS=--require=dotenv/config npm run dist -- -w",
         "dist:mac": "npm run dist -- -m",
         "dist:linux": "npm run dist -- -l",
-        "lint": "eslint --config .eslintrc.json ."
+        "lint": "eslint --config .eslintrc.json .",
+        "test": "node --test test"
     },
     "engines": {
         "node": "20.x.x"

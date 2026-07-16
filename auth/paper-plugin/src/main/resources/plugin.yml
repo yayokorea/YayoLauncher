@@ -1,0 +1,6 @@
+name: YayoAuth
+version: '${version}'
+main: net.yayokorea.auth.paper.YayoAuthPlugin
+description: One-time YayoLauncher admission ticket gate
+api-version: '26.2'
+authors: [Yayo]

@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+base {
+    archivesName = 'yayo-auth-paper'
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:26.2.build.60-beta'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('plugin.yml') {
+        expand version: project.version
+    }
+}

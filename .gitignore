@@ -1,8 +1,13 @@
-/node_modules/
+node_modules/
+**/build/
+.gradle/
+auth/.gradle/
 /.vs/
 /.vscode/
 /target/
 /logs/
 /dist/
 .env
+.env.*
+!.env.example
 *.pfx

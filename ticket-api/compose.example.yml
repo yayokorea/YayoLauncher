@@ -1,0 +1,25 @@
+services:
+  ticket-api:
+    build: .
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      REDIS_URL: redis://redis:6379
+      PAPER_SERVICE_TOKEN: ${PAPER_SERVICE_TOKEN}
+      TICKET_TTL_SECONDS: 30
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

@@ -145,6 +145,12 @@ Only one server in the array should have the `mainServer` property enabled. This
 
 Whether or not the server can be autoconnected to. If false, the server will not be autoconnected to even when the user has the autoconnect setting enabled.
 
+### `Server.ticketAuth: object`
+
+**OPTIONAL**
+
+Enables the YayoLauncher one-time admission ticket broker for this server. `ticketAuth.apiBaseUrl` must be an HTTPS URL. HTTP is accepted only when the hostname is exactly `127.0.0.1` for local development. See [one-time-tickets.md](one-time-tickets.md) for the required Fabric mod, Paper plugin, and API setup.
+
 ### `Server.javaOptions: JavaOptions`
 
 **OPTIONAL**

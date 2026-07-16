@@ -18,20 +18,37 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix ticket-api
+        shell: bash
+
+      - name: Verify
+        run: |
+          npm run lint
+          npm test
+          npm run lint --prefix ticket-api
+          npm test --prefix ticket-api
+          ./auth/gradlew -p auth clean build
         shell: bash
 
       - name: Build

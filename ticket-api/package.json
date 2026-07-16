@@ -1,0 +1,21 @@
+{
+    "name": "@yayolauncher/ticket-api",
+    "version": "1.0.0",
+    "private": true,
+    "description": "One-time Minecraft server admission ticket service",
+    "type": "commonjs",
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "start": "node src/server.js",
+        "test": "node --test",
+        "lint": "eslint src test"
+    },
+    "dependencies": {
+        "redis": "^5.8.2"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.1"
+    }
+}

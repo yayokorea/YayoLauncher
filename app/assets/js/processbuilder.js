@@ -23,7 +23,7 @@ const logger = LoggerUtil.getLogger('ProcessBuilder')
  */
 class ProcessBuilder {
 
-    constructor(distroServer, vanillaManifest, modManifest, authUser, launcherVersion) {
+    constructor(distroServer, vanillaManifest, modManifest, authUser, launcherVersion, launchEnvironment = {}) {
         this.gameDir = path.join(ConfigManager.getInstanceDirectory(), distroServer.rawServer.id)
         this.commonDir = ConfigManager.getCommonDirectory()
         this.server = distroServer
@@ -31,6 +31,7 @@ class ProcessBuilder {
         this.modManifest = modManifest
         this.authUser = authUser
         this.launcherVersion = launcherVersion
+        this.launchEnvironment = launchEnvironment
         this.forgeModListFile = path.join(this.gameDir, 'forgeMods.list') // 1.13+
         this.fmlDir = path.join(this.gameDir, 'forgeModList.json')
         this.llDir = path.join(this.gameDir, 'liteloaderModList.json')
@@ -79,7 +80,11 @@ class ProcessBuilder {
 
         const child = child_process.spawn(ConfigManager.getJavaExecutable(this.server.rawServer.id), args, {
             cwd: this.gameDir,
-            detached: ConfigManager.getLaunchDetached()
+            detached: ConfigManager.getLaunchDetached(),
+            env: {
+                ...process.env,
+                ...this.launchEnvironment
+            }
         })
 
         if (ConfigManager.getLaunchDetached()) {
