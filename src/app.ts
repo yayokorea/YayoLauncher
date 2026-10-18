@@ -11,14 +11,7 @@ import './static/styles/maintenance.scss'
 import './static/styles/update.scss'
 import './static/styles/dialog.scss'
 
-import { initLogin } from './views/login'
-import { initHome } from './views/home'
-import { initSettings } from './views/settings'
-import { bootstrap } from './init'
+import { mount } from 'svelte'
+import App from './App.svelte'
 
-initLogin()
-initHome()
-initSettings()
-
-bootstrap()
-
+mount(App, { target: document.getElementById('app-root')! })
