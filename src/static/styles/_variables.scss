@@ -1,20 +1,70 @@
 :root {
-  /* Colors */
-  --primary: #ff5722;
-  --primary-hover: #e64a19;
+  /* Brand palette (sampled from build/icon.png). See AGENTS.md > Brand colors. */
+  --brand-mint: #acf4e6;
+  --brand-teal: #5cd8d0;
+  --brand-teal-mid: #3abcc2;
+  --brand-teal-deep: #1fadb9;
+  --brand-gold: #fad174;
+  --brand-purple: #8465cf;
+  --brand-cream: #f7f0e5;
+  --brand-skin: #eccba9;
+  --brand-ink: #0e0212;
 
+  /* Primary (buttons, active states, progress, focus) */
+  --primary: var(--brand-teal);
+  --primary-hover: var(--brand-mint);
+  --primary-rgb: 92, 216, 208;
+  --on-primary: var(--brand-ink);
 
-  --bg-dark: #121212;
+  /* Secondary (secondary accents, hover accents, tags) */
+  --secondary: var(--brand-purple);
+  --secondary-text: #a98fe6;
+  --secondary-rgb: 132, 101, 207;
+
+  /* Accent (highlights, notifications, small emphasis) */
+  --accent: var(--brand-gold);
+  --accent-rgb: 250, 209, 116;
+
+  /* Semantic */
+  --success: #4caf50;
+  --warning: var(--brand-gold);
+  --danger: #f44336;
+  --danger-text: #ff5252;
+  --danger-soft: #da8a8a;
+  --danger-rgb: 244, 67, 54;
+
+  /* Surfaces (dark neutral tinted with --brand-ink) */
+  --bg-dark: #120f14;
+  --surface-1: #1a171c;
+  --surface-2: #1f1b22;
+  --surface-3: #2e2a31;
+  --surface-4: #3d3940;
+  --border-strong: #46424a;
+  --border-hover: #66626a;
+
+  /* Overlays */
+  --white-3: rgba(255, 255, 255, 0.03);
+  --white-5: rgba(255, 255, 255, 0.05);
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-15: rgba(255, 255, 255, 0.15);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-30: rgba(255, 255, 255, 0.3);
+  --scrim-rgb: 14, 2, 18;
+
+  /* Text */
   --text-main: #ffffff;
-  --text-muted: #aaaaaa;
+  --text-soft: var(--brand-cream);
+  --text-secondary: #dcd7e0;
+  --text-muted: #ada7b3;
+  --text-faint: #8f8996;
 
   /* Glassmorphism */
-  --glass-bg: rgba(30, 30, 30, 0.65);
+  --glass-bg: rgba(31, 27, 34, 0.65);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-blur: 12px;
 
   /* Shadows */
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(var(--scrim-rgb), 0.5);
 
   /* Layout */
   --sidebar-width: 400px;
