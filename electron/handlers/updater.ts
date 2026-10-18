@@ -1,6 +1,6 @@
 import type { WebContents } from 'electron'
 import { app, ipcMain } from 'electron'
-import { autoUpdater } from 'electron-updater'
+import { autoUpdater, CancellationToken } from 'electron-updater'
 import logger from 'electron-log/main'
 
 export interface IUpdateCheck {
@@ -16,8 +16,11 @@ export interface IUpdateProgress {
   bytesPerSecond: number
 }
 
+const DOWNLOAD_STALL_TIMEOUT = 30_000
+
 let initialized = false
 let target: WebContents | null = null
+let resetStallTimer: (() => void) | null = null
 
 function send(channel: string, payload: unknown) {
   if (target && !target.isDestroyed()) target.send(channel, payload)
@@ -47,6 +50,7 @@ function init() {
   autoUpdater.allowPrerelease = false
 
   autoUpdater.on('download-progress', (p) => {
+    resetStallTimer?.()
     send('updater:download_progress', {
       percent: p.percent,
       transferred: p.transferred,
@@ -86,12 +90,27 @@ export function registerUpdaterHandlers() {
   ipcMain.handle('updater:download', async (event): Promise<boolean> => {
     if (!isSupported()) return false
     target = event.sender
+
+    const token = new CancellationToken()
+    let stallTimer: NodeJS.Timeout | undefined
+    resetStallTimer = () => {
+      clearTimeout(stallTimer)
+      stallTimer = setTimeout(() => {
+        logger.error(`Launcher update download stalled (no progress for ${DOWNLOAD_STALL_TIMEOUT}ms), skipping update`)
+        token.cancel()
+      }, DOWNLOAD_STALL_TIMEOUT)
+    }
+
     try {
-      await autoUpdater.downloadUpdate()
+      resetStallTimer()
+      await autoUpdater.downloadUpdate(token)
       return true
     } catch (err) {
       logger.error('Error downloading launcher update', err)
       return false
+    } finally {
+      clearTimeout(stallTimer)
+      resetStallTimer = null
     }
   })
 
