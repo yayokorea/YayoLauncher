@@ -90,7 +90,7 @@ jobs:
         run: npx electron-builder ${{ matrix.flag }} --publish never
 
       - name: Upload build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-${{ matrix.os }}
           path: |
