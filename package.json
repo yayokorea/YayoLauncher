@@ -47,8 +47,9 @@
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
     "publish": {
-      "provider": "generic",
-      "url": "https://eml.yayokorea.net/"
+      "provider": "github",
+      "owner": "yayokorea",
+      "repo": "YayoLauncher"
     },
     "win": {
       "target": "nsis",
