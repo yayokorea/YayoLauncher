@@ -1,15 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { IGameSettings, ISystemInfo } from './handlers/settings'
 import type { IAuthResponse } from './handlers/auth'
+import type { IUpdateCheck, IUpdateProgress } from './handlers/updater'
 import type {
   Account,
-  BootstrapsEvents,
   CleanerEvents,
   DownloaderEvents,
   FilesManagerEvents,
   IAvatar,
   IBackground,
-  IBootstraps,
   ICape,
   IMaintenance,
   INews,
@@ -108,16 +107,20 @@ contextBridge.exposeInMainWorld('api', {
   maintenance: {
     get: (): Promise<IMaintenance | null> => ipcRenderer.invoke('maintenance:get')
   },
-  bootstraps: {
-    check: (): Promise<IBootstraps> => ipcRenderer.invoke('bootstraps:check'),
-    download: (): Promise<string> => ipcRenderer.invoke('bootstraps:download'),
-    install: (): Promise<void> => ipcRenderer.invoke('bootstraps:install'),
-    downloadProgress: (callback: (value: DownloaderEvents['download_progress'][0]) => void) =>
-      ipcRenderer.on('bootstraps:download_progress', (_event, value) => callback(value)),
-    downloadEnd: (callback: (value: DownloaderEvents['download_end'][0]) => void) =>
-      ipcRenderer.on('bootstraps:download_end', (_event, value) => callback(value)),
-    error: (callback: (value: BootstrapsEvents['bootstraps_error'][0]) => void) =>
-      ipcRenderer.on('bootstraps:error', (_event, value) => callback(value))
+  updater: {
+    check: (): Promise<IUpdateCheck> => ipcRenderer.invoke('updater:check'),
+    download: (): Promise<boolean> => ipcRenderer.invoke('updater:download'),
+    install: (): Promise<void> => ipcRenderer.invoke('updater:install'),
+    downloadProgress: (callback: (value: IUpdateProgress) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, value: IUpdateProgress) => callback(value)
+      ipcRenderer.on('updater:download_progress', listener)
+      return () => ipcRenderer.removeListener('updater:download_progress', listener)
+    },
+    error: (callback: (message: string) => void) => {
+      const listener = (_event: Electron.IpcRendererEvent, value: string) => callback(value)
+      ipcRenderer.on('updater:error', listener)
+      return () => ipcRenderer.removeListener('updater:error', listener)
+    }
   },
   settings: {
     get: (): Promise<IGameSettings> => ipcRenderer.invoke('settings:get'),

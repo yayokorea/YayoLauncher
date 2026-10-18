@@ -1,13 +1,12 @@
 import type { IGameSettings, ISystemInfo } from '../electron/handlers/settings'
 import type { IAuthResponse } from '../electron/handlers/auth'
+import type { IUpdateCheck, IUpdateProgress } from '../electron/handlers/updater'
 import type {
   Account,
-  BootstrapsEvents,
   CleanerEvents,
   DownloaderEvents,
   FilesManagerEvents,
   IBackground,
-  IBootstraps,
   IMaintenance,
   INews,
   IServerStatus,
@@ -57,13 +56,12 @@ declare global {
       maintenance: {
         get: () => Promise<IMaintenance | null>
       }
-      bootstraps: {
-        check: () => Promise<IBootstraps>
-        download: () => Promise<string>
+      updater: {
+        check: () => Promise<IUpdateCheck>
+        download: () => Promise<boolean>
         install: () => Promise<void>
-        downloadProgress: (callback: (value: DownloaderEvents['download_progress'][0]) => void) => void
-        downloadEnd: (callback: (value: DownloaderEvents['download_end'][0]) => void) => void
-        error: (callback: (value: BootstrapsEvents['bootstraps_error'][0]) => void) => void
+        downloadProgress: (callback: (value: IUpdateProgress) => void) => () => void
+        error: (callback: (message: string) => void) => () => void
       }
       game: {
         launch: (payload: { account: Account; settings: IGameSettings, profileSlug: string }) => Promise<void>
@@ -155,13 +153,12 @@ export const maintenance = {
   get: async () => await window.api.maintenance.get()
 }
 
-export const bootstraps = {
-  check: async () => await window.api.bootstraps.check(),
-  download: async () => await window.api.bootstraps.download(),
-  install: async () => await window.api.bootstraps.install(),
-  downloadProgress: (callback: (value: DownloaderEvents['download_progress'][0]) => void) => window.api.bootstraps.downloadProgress(callback),
-  downloadEnd: (callback: (value: DownloaderEvents['download_end'][0]) => void) => window.api.bootstraps.downloadEnd(callback),
-  error: (callback: (value: BootstrapsEvents['bootstraps_error'][0]) => void) => window.api.bootstraps.error(callback)
+export const updater = {
+  check: async () => await window.api.updater.check(),
+  download: async () => await window.api.updater.download(),
+  install: async () => await window.api.updater.install(),
+  downloadProgress: (callback: (value: IUpdateProgress) => void) => window.api.updater.downloadProgress(callback),
+  error: (callback: (message: string) => void) => window.api.updater.error(callback)
 }
 
 export const game = {
