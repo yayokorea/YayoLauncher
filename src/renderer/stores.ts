@@ -27,6 +27,9 @@ export type DialogButton = { text: string; type: 'ok' | 'cancel' | 'danger' | 'o
 export type DialogState = { message: string; title?: string; buttons: DialogButton[]; resolve: (value: unknown) => void } | null
 export const dialog = writable<DialogState>(null)
 
+// Dialogs are shown one at a time; a dialog requested while another is open waits for its turn.
+let dialogQueue: Promise<unknown> = Promise.resolve()
+
 export function showDialog<T = boolean>(
   message: string,
   buttons: DialogButton[] = [
@@ -35,7 +38,11 @@ export function showDialog<T = boolean>(
   ],
   title?: string
 ): Promise<T> {
-  return new Promise((resolve) => dialog.set({ message, title, buttons, resolve: resolve as (value: unknown) => void }))
+  const shown = dialogQueue.then(
+    () => new Promise<T>((resolve) => dialog.set({ message, title, buttons, resolve: resolve as (value: unknown) => void }))
+  )
+  dialogQueue = shown
+  return shown
 }
 
 export async function resolveDialog(button: DialogButton) {
