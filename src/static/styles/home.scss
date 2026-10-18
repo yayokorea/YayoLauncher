@@ -75,6 +75,8 @@
   user-select: none;
 
   .selected-profile {
+    width: 100%;
+    color: inherit;
     background: var(--surface-1);
     border: 1px solid var(--border-strong);
     padding: 10px 15px;
@@ -120,6 +122,13 @@
     overflow-y: auto;
 
     .profile-option {
+      display: block;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      font-family: inherit;
       padding: 10px 15px;
       cursor: pointer;
       font-size: 13px;
@@ -136,6 +145,16 @@
 
         &:hover {
           color: var(--on-primary);
+        }
+      }
+
+      &.empty {
+        cursor: default;
+        color: var(--text-muted);
+
+        &:hover {
+          background: transparent;
+          color: var(--text-muted);
         }
       }
     }
@@ -232,10 +251,6 @@
 .progress-container {
   margin-top: 20px;
   height: 40px;
-
-  &.hidden {
-    display: none;
-  }
 
   .progress-info {
     display: flex;
@@ -337,6 +352,12 @@
   padding: 30px 52px 0 60px;
   padding-bottom: 40px;
   overflow-y: auto;
+
+  .news-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px 0;
+  }
 
   &::-webkit-scrollbar {
     width: 8px;

@@ -2,7 +2,7 @@
 
 ## Stack
 
-Electron, Vite, TypeScript, SCSS
+Electron, Vite, Svelte 5, TypeScript, SCSS
 
 ## Commands
 
