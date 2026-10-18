@@ -97,6 +97,6 @@ export function registerUpdaterHandlers() {
 
   ipcMain.handle('updater:install', () => {
     if (!isSupported()) return
-    setImmediate(() => autoUpdater.quitAndInstall(false, true))
+    setImmediate(() => autoUpdater.quitAndInstall(true, true))
   })
 }
