@@ -8,7 +8,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: var(--bg-dark);
+  background: var(--bg);
   background-position: center;
   background-size: cover;
   color: var(--text-main);
@@ -17,12 +17,12 @@ body {
 }
 
 a {
-  color: var(--primary);
+  color: var(--primary-text);
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: var(--primary-hover);
+    color: var(--primary-text-hover);
     text-decoration: underline;
   }
 }
@@ -50,7 +50,7 @@ a {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(var(--scrim-rgb), 0.5);
+    background: rgba(var(--cream-rgb), 0.7);
     backdrop-filter: blur(8px);
   }
 }
@@ -72,7 +72,7 @@ a {
   }
 
   &.overlay {
-    background: rgba(var(--scrim-rgb), 0.8);
+    background: rgba(var(--scrim-rgb), 0.35);
     justify-content: center;
     align-items: center;
     z-index: 100;
@@ -135,14 +135,14 @@ a {
   }
 }
 
-/* Secondary Button (Dark/Glass) */
+/* Secondary Button (Cream) */
 .btn-secondary {
-  background: var(--white-5);
-  border: 1px solid var(--white-10);
+  background: var(--surface-1);
+  border: 1px solid var(--overlay-10);
   color: var(--text-secondary);
 
   &:hover:not(:disabled) {
-    background: var(--white-10);
+    background: var(--surface-3);
     border-color: rgba(var(--secondary-rgb), 0.6);
     color: var(--text-main);
     text-decoration: none;
@@ -173,7 +173,7 @@ a {
   border: 1px solid transparent;
 
   &:hover {
-    background: var(--white-10);
+    background: var(--overlay-10);
     color: var(--text-main);
     text-decoration: none;
   }
@@ -193,13 +193,13 @@ a {
 
 /* Brand Button: Microsoft */
 .btn-microsoft {
-  background: var(--surface-3);
+  background: var(--surface-1);
   color: var(--text-main);
   border: 1px solid var(--border-strong);
   width: 100%;
 
   &:hover {
-    background: var(--surface-4);
+    background: var(--surface-3);
     border-color: var(--border-hover);
   }
 }

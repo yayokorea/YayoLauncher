@@ -28,7 +28,7 @@ const backgroundColor = (color: string) => {
   const r = parseInt(color.slice(1, 3), 16)
   const g = parseInt(color.slice(3, 5), 16)
   const b = parseInt(color.slice(5, 7), 16)
-  return `rgba(${r}, ${g}, ${b}, 0.1)`
+  return `rgba(${r}, ${g}, ${b}, 0.18)`
 }
 
 export function initHome() {
@@ -121,20 +121,20 @@ export function initHome() {
 
   const loadNews = async () => {
     if (!newsList) return
-    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">뉴스를 불러오는 중...</div>'
+    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-muted);">뉴스를 불러오는 중...</div>'
     const feed = await news.getNews()
 
     newsList.innerHTML = ''
 
     if (!feed || feed.length === 0) {
-      newsList.innerHTML = '<div style="text-align:center; color: #888;">표시할 뉴스가 없습니다.</div>'
+      newsList.innerHTML = '<div style="text-align:center; color: var(--text-muted);">표시할 뉴스가 없습니다.</div>'
       return
     }
 
     feed.forEach((item: any) => {
       let tagsHTML = ''
       item.tags.forEach((tag: any) => {
-        tagsHTML += `<span class="tag" style="color: ${tag.color}; background-color: ${backgroundColor(tag.color)}">${tag.name}</span>`
+        tagsHTML += `<span class="tag" style="color: color-mix(in srgb, ${tag.color} 55%, var(--brand-ink)); background-color: ${backgroundColor(tag.color)}">${tag.name}</span>`
       })
       const articleHTML = `
         <article class="news-article">

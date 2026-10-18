@@ -153,7 +153,7 @@ const shared = {
     })
 
     const capeSpan = document.createElement('span')
-    capeSpan.innerHTML = '<i class="fa-solid fa-ban" style="display: block; font-size: 54px; color: #525252; position: relative; top: -5px;"></i>'
+    capeSpan.innerHTML = '<i class="fa-solid fa-ban" style="display: block; font-size: 54px; color: var(--text-faint); position: relative; top: -5px;"></i>'
     capeDiv.appendChild(capeSpan)
     capeGallerySettingsEl?.appendChild(capeDiv)
 

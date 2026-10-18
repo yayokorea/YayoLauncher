@@ -11,7 +11,7 @@ div.maintenance-card {
 
   .up {
     font-size: 2rem;
-    color: var(--primary);
+    color: var(--primary-text);
     margin-bottom: 1rem;
   }
 
@@ -40,7 +40,7 @@ div.maintenance-card {
 
   .progress-bar-bg {
     height: 4px;
-    background: var(--white-10);
+    background: var(--overlay-10);
     border-radius: 2px;
     overflow: hidden;
   }
