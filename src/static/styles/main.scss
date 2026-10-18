@@ -27,6 +27,11 @@ a {
   }
 }
 
+::selection {
+  background: rgba(var(--primary-rgb), 0.35);
+  color: var(--text-main);
+}
+
 #app {
   position: relative;
   width: 100%;
@@ -45,7 +50,7 @@ a {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(var(--scrim-rgb), 0.5);
     backdrop-filter: blur(8px);
   }
 }
@@ -67,7 +72,7 @@ a {
   }
 
   &.overlay {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(var(--scrim-rgb), 0.8);
     justify-content: center;
     align-items: center;
     z-index: 100;
@@ -113,16 +118,16 @@ a {
   }
 }
 
-/* Primary Button (Orange) */
+/* Primary Button (Teal) */
 .btn-primary {
   background: var(--primary);
-  color: white;
-  box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+  color: var(--on-primary);
+  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
 
   &:hover:not(:disabled) {
     background: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4);
+    box-shadow: 0 6px 15px rgba(var(--primary-rgb), 0.4);
   }
 
   &:active:not(:disabled) {
@@ -132,27 +137,27 @@ a {
 
 /* Secondary Button (Dark/Glass) */
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ddd;
+  background: var(--white-5);
+  border: 1px solid var(--white-10);
+  color: var(--text-secondary);
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+    background: var(--white-10);
+    border-color: rgba(var(--secondary-rgb), 0.6);
+    color: var(--text-main);
     text-decoration: none;
   }
 }
 
 /* Danger Button (Red) */
 .btn-danger {
-  background: rgba(244, 67, 54, 0.1);
-  border: 1px solid rgba(244, 67, 54, 0.5);
-  color: #ff5252;
+  background: rgba(var(--danger-rgb), 0.1);
+  border: 1px solid rgba(var(--danger-rgb), 0.5);
+  color: var(--danger-text);
 
   &:hover:not(:disabled) {
-    background: rgba(244, 67, 54, 0.2);
-    border-color: #f44336;
+    background: rgba(var(--danger-rgb), 0.2);
+    border-color: var(--danger);
   }
 }
 
@@ -164,12 +169,12 @@ a {
   border-radius: 50%;
   /* Circle */
   background: transparent;
-  color: #aaa;
+  color: var(--text-muted);
   border: 1px solid transparent;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--white-10);
+    color: var(--text-main);
     text-decoration: none;
   }
 }
@@ -181,20 +186,20 @@ a {
   color: var(--text-muted);
 
   &:hover {
-    color: var(--primary);
-    background: rgba(255, 87, 34, 0.1);
+    color: var(--secondary-text);
+    background: rgba(var(--secondary-rgb), 0.12);
   }
 }
 
 /* Brand Button: Microsoft */
 .btn-microsoft {
-  background: #2f2f2f;
-  color: white;
-  border: 1px solid #444;
+  background: var(--surface-3);
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
   width: 100%;
 
   &:hover {
-    background: #3f3f3f;
-    border-color: #666;
+    background: var(--surface-4);
+    border-color: var(--border-hover);
   }
 }

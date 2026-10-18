@@ -13,7 +13,7 @@ import { registerProfilesHandlers } from './handlers/profiles'
 import { registerSkinHandlers } from './handlers/skin'
 
 const APP_TITLE = 'YayoLauncher'
-const BG_COLOR = '#121212'
+const BG_COLOR = '#120f14' // keep in sync with --bg-dark in src/static/styles/_variables.scss
 
 let mainWindow: BrowserWindow | null = null
 
