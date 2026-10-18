@@ -16,6 +16,7 @@
   "license": "MIT",
   "main": "dist-electron/main.js",
   "scripts": {
+    "predev": "install-electron",
     "dev": "vite",
     "build": "tsc && vite build",
     "release:win": "npm run build && electron-builder --win",
@@ -127,7 +128,7 @@
   },
   "devDependencies": {
     "@types/dompurify": "^3.2.0",
-    "electron": "^41.10.7",
+    "electron": "^44.9.0",
     "electron-builder": "^26.15.3",
     "prettier": "^3.9.10",
     "sass-embedded": "^1.105.2",
