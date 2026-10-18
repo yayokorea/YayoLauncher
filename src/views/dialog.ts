@@ -34,8 +34,8 @@ class DialogSystem {
       }
 
       const configButtons = buttons ?? [
-        { text: 'Cancel', type: 'cancel' },
-        { text: 'OK', type: 'ok' }
+        { text: '취소', type: 'cancel' },
+        { text: '확인', type: 'ok' }
       ]
 
       configButtons.forEach((btnConfig) => {

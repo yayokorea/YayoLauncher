@@ -11,7 +11,7 @@ export function initLogin() {
     const originalText = btn.innerHTML
 
     btn.disabled = true
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...'
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 연결 중...'
 
     try {
       const session = await auth.login()
@@ -23,11 +23,11 @@ export function initLogin() {
         setView('home')
       } else {
         logger.error(session.error)
-        await Dialog.show('Login failed', [{ text: 'OK', type: 'ok' }])
+        await Dialog.show('로그인에 실패했습니다.', [{ text: '확인', type: 'ok' }])
       }
     } catch (err) {
       logger.error(err)
-      await Dialog.show('An error occurred during login.', [{ text: 'OK', type: 'ok' }])
+      await Dialog.show('로그인 중 오류가 발생했습니다.', [{ text: '확인', type: 'ok' }])
     } finally {
       btn.disabled = false
       btn.innerHTML = originalText
