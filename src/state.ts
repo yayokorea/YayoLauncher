@@ -90,7 +90,7 @@ function getAccountIcon(type: 'msa' | 'yggdrasil' | 'azuriom' | 'crack') {
     case 'yggdrasil':
       return '<i class="fa-solid fa-user"></i>Yggdrasil 계정'
     case 'azuriom':
-      return '<i class="fa-brands fa-globe"></i>Azuriom 계정'
+      return '<i class="fa-solid fa-globe"></i>Azuriom 계정'
     case 'crack':
       return '<i class="fa-solid fa-user-slash"></i>오프라인 계정'
     default:
