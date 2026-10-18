@@ -111,6 +111,8 @@
       ],
       "icon": "build/icon.png",
       "category": "Game",
+      "maintainer": "Yayo",
+      "vendor": "Yayo",
       "description": "Modded Minecraft Launcher",
       "artifactName": "${productName}-${version}.${ext}"
     }

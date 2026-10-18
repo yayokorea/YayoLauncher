@@ -3,48 +3,79 @@ name: Release
 on:
   push:
     tags: ['v*']
+  # Manual run: builds installers and uploads them as artifacts, without publishing a release.
   workflow_dispatch:
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22
+
 jobs:
-  release:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      prerelease: ${{ steps.meta.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tag matches package.json version
+        id: meta
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME#v}"
+            if [ "$pkg" != "$tag" ]; then
+              echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${pkg}"
+              exit 1
+            fi
+          fi
+          case "$pkg" in
+            *-*) echo "prerelease=true" >> "$GITHUB_OUTPUT" ;;
+            *)   echo "prerelease=false" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+      - name: Type check and bundle
+        run: npm run build
+
+  build:
+    name: Build (${{ matrix.name }})
+    needs: validate
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
-          - os: windows-latest
-            flag: --win
-          - os: macos-latest
-            flag: --mac
-          - os: ubuntu-latest
-            flag: --linux
-    runs-on: ${{ matrix.os }}
-    permissions:
-      contents: write
+          - { name: Windows, os: windows-latest, flag: --win }
+          - { name: macOS, os: macos-latest, flag: --mac }
+          - { name: Linux, os: ubuntu-latest, flag: --linux }
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # macOS build is unsigned (identity: null in package.json).
+      # The macOS build is unsigned (identity: null in package.json).
       CSC_IDENTITY_AUTO_DISCOVERY: false
-      # Optional Windows code signing: add CSC_LINK / CSC_KEY_PASSWORD repository
-      # secrets and expose them here. Not required.
+      # Optional Windows code signing: add CSC_LINK / CSC_KEY_PASSWORD repository secrets
+      # and uncomment. Not required.
       # CSC_LINK: ${{ secrets.CSC_LINK }}
       # CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check tag matches package.json version
-        if: startsWith(github.ref, 'refs/tags/v')
-        shell: bash
-        run: |
-          pkg=$(node -p "require('./package.json').version")
-          tag="${GITHUB_REF_NAME#v}"
-          if [ "$pkg" != "$tag" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package.json version $pkg" >&2
-            exit 1
-          fi
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
       - name: Install rpm (Linux rpm target)
@@ -54,18 +85,11 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      # Tag push: the first job to finish creating the release wins; the others
-      # find the existing release for the tag and attach their files to it.
-      - name: Build and publish
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: npx electron-builder ${{ matrix.flag }} --publish always
-
-      - name: Build only
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      # Never publish from here: the release job below publishes once, after every platform succeeded.
+      - name: Package
         run: npx electron-builder ${{ matrix.flag }} --publish never
 
-      - name: Upload artifacts
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.os }}
@@ -79,3 +103,43 @@ jobs:
             release/*.blockmap
             release/latest*.yml
           if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish release
+    needs: [validate, build]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          pattern: release-*
+          merge-multiple: true
+
+      - name: List assets
+        run: ls -la assets
+
+      - name: Generate release notes
+        run: bash .github/scripts/changelog.sh "$TAG" > notes.md
+
+      - name: Create or update release
+        run: |
+          flags=()
+          if [ "${{ needs.validate.outputs.prerelease }}" = "true" ]; then flags+=(--prerelease); fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "YayoLauncher ${TAG#v}" --notes-file notes.md --draft=false "${flags[@]}"
+            gh release upload "$TAG" assets/* --clobber
+          else
+            gh release create "$TAG" assets/* --verify-tag --title "YayoLauncher ${TAG#v}" --notes-file notes.md "${flags[@]}"
+          fi
