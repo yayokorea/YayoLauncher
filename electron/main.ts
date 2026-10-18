@@ -11,6 +11,8 @@ import { registerUpdaterHandlers } from './handlers/updater'
 import logger from 'electron-log/main'
 import { registerProfilesHandlers } from './handlers/profiles'
 import { registerSkinHandlers } from './handlers/skin'
+import { registerStatsHandlers } from './handlers/stats'
+import { registerCrashReportHandlers } from './handlers/crashreports'
 
 const APP_TITLE = 'YayoLauncher'
 const BG_COLOR = '#f7f0e5' // keep in sync with --bg in src/static/styles/_variables.scss
@@ -114,11 +116,13 @@ function configureAppMenu() {
 
 app.whenReady().then(() => {
   logger.initialize()
+  const stats = registerStatsHandlers()
   configureAppMenu()
   createWindow()
 
   if (mainWindow) {
-    registerAuthHandlers(mainWindow)
+    const auth = registerAuthHandlers(mainWindow)
+    stats.attach(auth)
     registerProfilesHandlers()
     registerServerHandlers()
     registerSkinHandlers()
@@ -126,7 +130,8 @@ app.whenReady().then(() => {
     registerBackgroundHandlers()
     registerMaintenanceHandlers()
     registerUpdaterHandlers()
-    registerLauncherHandlers(mainWindow)
+    const crashReports = registerCrashReportHandlers(mainWindow)
+    registerLauncherHandlers(mainWindow, { stats, crashReports })
     registerSettingsHandlers()
   }
 })
