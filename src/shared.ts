@@ -85,7 +85,7 @@ const shared = {
           document.getElementById('settings-content')?.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (err) {
           logger.error('Error occurred while changing the skin:', err)
-          await Dialog.show('An error occurred while changing the skin. Please try again in few minutes.', [{ text: 'Close', type: 'ok' }])
+          await Dialog.show('스킨을 변경하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', [{ text: '닫기', type: 'ok' }])
         }
       })
 
@@ -101,7 +101,7 @@ const shared = {
             shared.resetSkinViews()
           } catch (err) {
             logger.error('Error occurred while deleting the skin:', err)
-            await Dialog.show('An error occurred while deleting the skin.', [{ text: 'OK', type: 'ok' }])
+            await Dialog.show('스킨을 삭제하는 중 오류가 발생했습니다.', [{ text: '확인', type: 'ok' }])
           }
         })
 
@@ -147,7 +147,7 @@ const shared = {
           document.getElementById('settings-content')?.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (err) {
           logger.error('Error occurred while unequipping the cape:', err)
-          await Dialog.show('An error occurred while unequipping the cape. Please try again in few minutes.', [{ text: 'Close', type: 'ok' }])
+          await Dialog.show('망토를 해제하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', [{ text: '닫기', type: 'ok' }])
         }
       }
     })
@@ -170,7 +170,7 @@ const shared = {
           document.getElementById('settings-content')?.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (err) {
           logger.error('Error occurred while changing the cape:', err)
-          await Dialog.show('An error occurred while changing the cape. Please try again in few minutes.', [{ text: 'Close', type: 'ok' }])
+          await Dialog.show('망토를 변경하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', [{ text: '닫기', type: 'ok' }])
         }
       })
 

@@ -5,8 +5,8 @@ import type { IGameSettings } from '../../electron/handlers/settings'
 import shared from '../shared'
 
 const resolutionList = [
-  { label: 'Auto (default)', value: '854x480', width: 854, height: 480 },
-  { label: 'Fullscreen', value: 'fullscreen', width: 854, height: 480 },
+  { label: '자동 (기본값)', value: '854x480', width: 854, height: 480 },
+  { label: '전체 화면', value: 'fullscreen', width: 854, height: 480 },
   { label: '2560x1440 (1440p)', value: '2560x1440', width: 2560, height: 1440 },
   { label: '1920x1080 (1080p)', value: '1920x1080', width: 1920, height: 1080 },
   { label: '1600x900', value: '1600x900', width: 1600, height: 900 },
@@ -59,9 +59,9 @@ function initUIListeners() {
 
   logoutBtn?.addEventListener('click', async () => {
     if (
-      await Dialog.show('Log out?', [
-        { text: 'Cancel', type: 'cancel' },
-        { text: 'Logout', type: 'danger' }
+      await Dialog.show('로그아웃하시겠어요?', [
+        { text: '취소', type: 'cancel' },
+        { text: '로그아웃', type: 'danger' }
       ])
     ) {
       await auth.logout()
@@ -271,7 +271,7 @@ async function addSkin() {
   try {
     const result = await skin.updateSkin(skinSource, variant)
     if (!result) {
-      await Dialog.show('Failed to add skin. Please check the URL or file and try again.', [{ text: 'Close', type: 'ok' }])
+      await Dialog.show('스킨을 추가하지 못했습니다. URL이나 파일을 확인한 뒤 다시 시도해 주세요.', [{ text: '닫기', type: 'ok' }])
       return
     }
 
@@ -279,7 +279,7 @@ async function addSkin() {
     shared.resetMainView()
     shared.resetSkinViews()
   } catch (err) {
-    await Dialog.show('An error occurred while adding the skin. Please try again in few minutes.', [{ text: 'Close', type: 'ok' }])
+    await Dialog.show('스킨을 추가하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', [{ text: '닫기', type: 'ok' }])
     return
   }
 }

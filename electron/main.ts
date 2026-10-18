@@ -93,17 +93,17 @@ function configureAppMenu() {
       : []),
 
     {
-      label: 'File',
+      label: '파일',
       submenu: [{ role: 'close' }]
     },
 
     {
-      label: 'Edit',
+      label: '편집',
       submenu: [{ role: 'undo' }, { role: 'redo' }, { type: 'separator' }, { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectAll' }]
     },
 
     {
-      label: 'View',
+      label: '보기',
       submenu: [{ role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' }, { type: 'separator' }, { role: 'togglefullscreen' }]
     }
   ]

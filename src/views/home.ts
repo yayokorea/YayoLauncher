@@ -16,7 +16,7 @@ marked.use({
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 const parseNews = (rawContent: string) =>
@@ -94,7 +94,7 @@ export function initHome() {
       statusDot.classList.remove('online', 'offline')
       statusDot.classList.add('pinging')
     }
-    if (statusText) statusText.innerHTML = 'Pinging...'
+    if (statusText) statusText.innerHTML = '확인 중...'
     if (playerCount) playerCount.innerHTML = ''
 
     const status = selectedProfile ? await server.getStatus(selectedProfile.ip, selectedProfile.port || 25565) : null
@@ -104,7 +104,7 @@ export function initHome() {
         statusDot.classList.remove('pinging', 'offline')
         statusDot.classList.add('online')
       }
-      if (statusText) statusText.innerHTML = 'Online'
+      if (statusText) statusText.innerHTML = '온라인'
 
       if (playerCount) {
         playerCount.innerHTML = `<i class="fa-fw fa-solid fa-users"></i>&nbsp;&nbsp;${status.players.online.toLocaleString()} / ${status.players.max.toLocaleString()}`
@@ -114,20 +114,20 @@ export function initHome() {
         statusDot.classList.remove('pinging', 'online')
         statusDot.classList.add('offline')
       }
-      if (statusText) statusText.innerHTML = 'Offline'
+      if (statusText) statusText.innerHTML = '오프라인'
       if (playerCount) playerCount.innerHTML = ''
     }
   }
 
   const loadNews = async () => {
     if (!newsList) return
-    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">Loading news...</div>'
+    newsList.innerHTML = '<div style="text-align:center; padding: 20px; color: #888;">뉴스를 불러오는 중...</div>'
     const feed = await news.getNews()
 
     newsList.innerHTML = ''
 
     if (!feed || feed.length === 0) {
-      newsList.innerHTML = '<div style="text-align:center; color: #888;">No news available.</div>'
+      newsList.innerHTML = '<div style="text-align:center; color: #888;">표시할 뉴스가 없습니다.</div>'
       return
     }
 
@@ -140,8 +140,8 @@ export function initHome() {
         <article class="news-article">
           <div class="article-meta">
             <div class="author">
-              <img src="https://minotar.net/helm/${item.author.username}/24" alt="Author" />
-              <span>${item.author.username ?? 'Admin Team'}</span>
+              <img src="https://minotar.net/helm/${item.author.username}/24" alt="작성자" />
+              <span>${item.author.username ?? '운영팀'}</span>
             </div>
             <span class="separator">•</span>
             <span class="date">${formatDate(item.createdAt)}</span>
@@ -151,7 +151,7 @@ export function initHome() {
 
           <h3>${item.title}</h3>
           
-          ${item.image ? `<img src="${item.image}" alt="News Image" onerror="this.style.display='none'"/>` : ''}
+          ${item.image ? `<img src="${item.image}" alt="뉴스 이미지" onerror="this.style.display='none'"/>` : ''}
 
           <div class="article-content">
             ${parseNews(item.content)}
@@ -221,13 +221,13 @@ Ready to launch the game with the following settings:
 
   game.launchComputeDownload(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Preparing download...'
+    if (progressLabel) progressLabel.innerText = '다운로드 준비 중...'
     if (progressPercent) progressPercent.innerText = ''
   })
   game.launchDownload((download) => {
     setIndeterminate(false)
     totalToDownload = download.total.size
-    if (progressLabel) progressLabel.innerText = `Downloading files...`
+    if (progressLabel) progressLabel.innerText = `파일 다운로드 중...`
   })
   game.downloadProgress((progress) => {
     if (!totalDownloadedByType.find((t) => t.type === progress.type)) {
@@ -238,30 +238,30 @@ Ready to launch the game with the following settings:
     if (progressBar && progressLabel && progressPercent) {
       const downloadedSum = totalDownloadedByType.reduce((acc, curr) => acc + curr.size, 0)
       progressBar.style.width = `${Math.min((downloadedSum / totalToDownload) * 100, 100)}%`
-      progressLabel.innerText = `Downloading ${progress.type === 'JAVA' ? 'Java' : 'game files'}...`
+      progressLabel.innerText = `${progress.type === 'JAVA' ? 'Java' : '게임 파일'} 다운로드 중...`
       progressPercent.innerText = `${Math.round(Math.min((downloadedSum / totalToDownload) * 100, 100))}%`
     }
   })
   game.launchInstallLoader(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Extracting files...'
+    if (progressLabel) progressLabel.innerText = '파일 압축 해제 중...'
     if (progressPercent) progressPercent.innerText = ''
   })
   game.launchExtractNatives(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Extracting files...'
+    if (progressLabel) progressLabel.innerText = '파일 압축 해제 중...'
   })
   game.launchCopyAssets(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Extracting files...'
+    if (progressLabel) progressLabel.innerText = '파일 압축 해제 중...'
   })
   game.launchPatchLoader(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Finalizing setup...'
+    if (progressLabel) progressLabel.innerText = '설치 마무리 중...'
   })
   game.launchLaunch(() => {
     setIndeterminate(true)
-    if (progressLabel) progressLabel.innerText = 'Launching game...'
+    if (progressLabel) progressLabel.innerText = '게임 시작 중...'
   })
   game.launched(() => {
     setTimeout(() => {

@@ -50,19 +50,19 @@ export async function bootstrap() {
   if (up.updateAvailable) {
     setIndeterminate(false)
     progressBar!.style.width = '0%'
-    progressLabel!.innerText = 'Preparing update...'
+    progressLabel!.innerText = '업데이트 준비 중...'
     progressPercent!.innerText = '0%'
     setBlockingView('update')
     await new Promise((r) => setTimeout(r, 500))
     bootstraps.downloadProgress((value) => {
-      progressLabel!.innerText = `Downloading update...`
+      progressLabel!.innerText = `업데이트 다운로드 중...`
       const percent = ((value.downloaded.size / value.total.amount) * 100).toFixed(2)
       progressPercent!.innerText = `${percent}%`
       progressBar!.style.width = `${percent}%`
     })
     bootstraps.downloadEnd(async () => {
       setIndeterminate(true)
-      progressLabel!.innerText = `Installing...`
+      progressLabel!.innerText = `설치 중...`
       await bootstraps.install()
     })
     bootstraps.error((err) => {
@@ -80,8 +80,8 @@ export async function bootstrap() {
   if (mn) {
     const start = new Date(mn.startTime as Date)
     const end = new Date(mn.endTime as Date)
-    maintenanceDates.innerText = `From ${start.toLocaleString([], dateFormatOptions)} to ${end.toLocaleString([], dateFormatOptions)}`
-    maintenanceReason.innerText = mn.message ?? 'Please come back later.'
+    maintenanceDates.innerText = `${start.toLocaleString([], dateFormatOptions)} ~ ${end.toLocaleString([], dateFormatOptions)}`
+    maintenanceReason.innerText = mn.message ?? '잠시 후 다시 접속해 주세요.'
     setBlockingView('maintenance')
     return
   }
