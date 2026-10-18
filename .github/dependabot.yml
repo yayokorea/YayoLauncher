@@ -8,6 +8,14 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: development
+    ignore:
+      # Major upgrades are tested by hand: electron needs a matching eml-lib, the others change the toolchain.
+      - dependency-name: electron
+        update-types: ['version-update:semver-major']
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      - dependency-name: vite-plugin-electron
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: chore
   - package-ecosystem: github-actions

@@ -6,7 +6,7 @@ import type {
   Account,
   CleanerEvents,
   DownloaderEvents,
-  FilesManagerEvents,
+  FileManagerEvents,
   IAvatar,
   IBackground,
   ICape,
@@ -50,14 +50,14 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.on('game:launch_install_loader', (_event, value) => callback(value)),
 
     launchExtractNatives: (callback: () => void) => ipcRenderer.on('game:launch_extract_natives', (_event) => callback()),
-    extractProgress: (callback: (value: FilesManagerEvents['extract_progress'][0]) => void) =>
+    extractProgress: (callback: (value: FileManagerEvents['extract_progress'][0]) => void) =>
       ipcRenderer.on('game:extract_progress', (_event, value) => callback(value)),
-    extractEnd: (callback: (value: FilesManagerEvents['extract_end'][0]) => void) =>
+    extractEnd: (callback: (value: FileManagerEvents['extract_end'][0]) => void) =>
       ipcRenderer.on('game:extract_end', (_event, value) => callback(value)),
     launchCopyAssets: (callback: () => void) => ipcRenderer.on('game:launch_copy_assets', (_event) => callback()),
-    copyProgress: (callback: (value: FilesManagerEvents['copy_progress'][0]) => void) =>
+    copyProgress: (callback: (value: FileManagerEvents['copy_progress'][0]) => void) =>
       ipcRenderer.on('game:copy_progress', (_event, value) => callback(value)),
-    copyEnd: (callback: (value: FilesManagerEvents['copy_end'][0]) => void) => ipcRenderer.on('game:copy_end', (_event, value) => callback(value)),
+    copyEnd: (callback: (value: FileManagerEvents['copy_end'][0]) => void) => ipcRenderer.on('game:copy_end', (_event, value) => callback(value)),
     launchPatchLoader: (callback: () => void) => ipcRenderer.on('game:launch_patch_loader', (_event) => callback()),
     patchProgress: (callback: (value: PatcherEvents['patch_progress'][0]) => void) =>
       ipcRenderer.on('game:patch_progress', (_event, value) => callback(value)),
