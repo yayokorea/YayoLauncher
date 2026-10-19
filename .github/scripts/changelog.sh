@@ -23,7 +23,7 @@ section() {
 OTHERS="$(printf '%s\n' "$SUBJECTS" | grep -viE '^(feat|fix|perf|style|ui|refactor|docs|chore|ci|build|test)(\([^)]*\))?!?:' | grep -v '^$' | sed 's/^/- /' || true)"
 
 cat <<EOF
-## YayoLauncher ${VERSION}
+## Yayo Launcher ${VERSION}
 
 EOF
 

@@ -1,4 +1,4 @@
-# YayoLauncher
+# Yayo Launcher
 
 Modded Minecraft launcher, powered by [EML Lib](https://github.com/Electron-Minecraft-Launcher/EML-Lib) and configured through an [EML AdminTool](https://github.com/Electron-Minecraft-Launcher/EML-AdminTool) instance.
 

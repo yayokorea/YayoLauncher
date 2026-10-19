@@ -14,7 +14,7 @@ import { registerSkinHandlers } from './handlers/skin'
 import { registerStatsHandlers } from './handlers/stats'
 import { registerCrashReportHandlers } from './handlers/crashreports'
 
-const APP_TITLE = 'YayoLauncher'
+const APP_TITLE = 'Yayo Launcher'
 const BG_COLOR = '#f7f0e5' // keep in sync with --bg in src/static/styles/_variables.scss
 
 let mainWindow: BrowserWindow | null = null
@@ -22,6 +22,9 @@ let mainWindow: BrowserWindow | null = null
 if (process.env.VITE_DEV_SERVER_URL) {
   app.setName(APP_TITLE)
 }
+
+// keep the pre-rename data directory so existing settings and sessions survive
+app.setPath('userData', path.join(app.getPath('appData'), 'YayoLauncher'))
 
 function createWindow() {
   nativeTheme.themeSource = 'dark'

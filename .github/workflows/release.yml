@@ -138,8 +138,8 @@ jobs:
           flags=()
           if [ "${{ needs.validate.outputs.prerelease }}" = "true" ]; then flags+=(--prerelease); fi
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release edit "$TAG" --title "YayoLauncher ${TAG#v}" --notes-file notes.md --draft=false "${flags[@]}"
+            gh release edit "$TAG" --title "Yayo Launcher ${TAG#v}" --notes-file notes.md --draft=false "${flags[@]}"
             gh release upload "$TAG" assets/* --clobber
           else
-            gh release create "$TAG" assets/* --verify-tag --title "YayoLauncher ${TAG#v}" --notes-file notes.md "${flags[@]}"
+            gh release create "$TAG" assets/* --verify-tag --title "Yayo Launcher ${TAG#v}" --notes-file notes.md "${flags[@]}"
           fi

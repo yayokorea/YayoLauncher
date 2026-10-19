@@ -1,6 +1,6 @@
 {
   "name": "yayolauncher",
-  "productName": "YayoLauncher",
+  "productName": "Yayo Launcher",
   "author": "Yayo",
   "description": "Modded Minecraft Launcher",
   "homepage": "https://yayokorea.net",
@@ -25,7 +25,7 @@
   },
   "build": {
     "appId": "net.yayokorea.yayolauncher",
-    "productName": "YayoLauncher",
+    "productName": "Yayo Launcher",
     "copyright": "Copyright © 2026 Yayo",
     "directories": {
       "output": "release",
@@ -64,10 +64,10 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "YayoLauncher",
+      "shortcutName": "Yayo Launcher",
       "deleteAppDataOnUninstall": true,
-      "artifactName": "${productName}-Setup-${version}.${ext}",
-      "uninstallDisplayName": "YayoLauncher"
+      "artifactName": "YayoLauncher-Setup-${version}.${ext}",
+      "uninstallDisplayName": "Yayo Launcher"
     },
     "mac": {
       "target": [
@@ -80,7 +80,7 @@
       "identity": null,
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
-      "artifactName": "${productName}-${version}.${ext}"
+      "artifactName": "YayoLauncher-${version}.${ext}"
     },
     "dmg": {
       "background": "build/background.png",
@@ -114,7 +114,7 @@
       "maintainer": "Yayo",
       "vendor": "Yayo",
       "description": "Modded Minecraft Launcher",
-      "artifactName": "${productName}-${version}.${ext}"
+      "artifactName": "YayoLauncher-${version}.${ext}"
     }
   },
   "dependencies": {

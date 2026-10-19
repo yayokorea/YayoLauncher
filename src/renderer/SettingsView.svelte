@@ -65,7 +65,7 @@
     try {
       const [info, saved] = await Promise.all([system.getInfo(), settingsApi.get()])
       settings = saved
-      version = `YayoLauncher v${info.version}`
+      version = `Yayo Launcher v${info.version}`
       maxMemory = Math.max(1, Math.min(info.totalMem, 16))
       minMemory = Math.min(saved.memory.min, maxMemory - RAM_STEP)
       maxAllocated = Math.min(Math.max(saved.memory.max, minMemory + RAM_STEP), maxMemory)
