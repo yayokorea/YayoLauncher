@@ -1,14 +1,17 @@
 import { defineConfig } from 'vite'
 import electron from 'vite-plugin-electron'
-import { svelte, vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 export default defineConfig({
   base: './',
   server: {
     port: 5174
   },
+  build: {
+    chunkSizeWarningLimit: 1000
+  },
   plugins: [
-    svelte({ preprocess: vitePreprocess(), compilerOptions: { runes: true } }),
+    svelte(),
     electron([
       {
         entry: 'electron/main.ts'
