@@ -327,7 +327,7 @@ Ready to launch the game with the following settings:
           </div>
           <h3>{item.title}</h3>
           <div class="hv-card-meta">
-            <img src={`https://minotar.net/helm/${item.author.username ?? 'steve'}/24`} alt="작성자" />
+            <img src={`https://heads.discordsrv.com/${encodeURIComponent(item.author.username ?? 'steve')}/overlay/100`} alt="작성자" />
             <span>{item.author.username ?? '운영팀'}</span>
             <span>·</span>
             <span>{formatDate(item.createdAt)}</span>

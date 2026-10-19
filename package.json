@@ -12,7 +12,7 @@
     "url": "git+https://github.com/yayokorea/YayoLauncher.git"
   },
   "private": true,
-  "version": "5.1.1",
+  "version": "5.1.2",
   "license": "MIT",
   "main": "dist-electron/main.js",
   "scripts": {
