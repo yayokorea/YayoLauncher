@@ -114,6 +114,11 @@ declare global {
         set: (s: IGameSettings) => Promise<boolean>
         pickJava: () => Promise<string | null>
       }
+      window: {
+        minimize: () => Promise<void>
+        toggleMaximize: () => Promise<void>
+        close: () => Promise<void>
+      }
       system: {
         getInfo: () => Promise<ISystemInfo>
       }
@@ -218,3 +223,9 @@ export const system = {
 }
 
 
+
+export const appWindow = {
+  minimize: () => window.api.window.minimize(),
+  toggleMaximize: () => window.api.window.toggleMaximize(),
+  close: () => window.api.window.close()
+}

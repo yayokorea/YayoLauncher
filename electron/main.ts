@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, nativeTheme, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, nativeTheme, shell } from 'electron'
 import path from 'node:path'
 import { registerAuthHandlers } from './handlers/auth'
 import { registerLauncherHandlers } from './handlers/launcher'
@@ -16,7 +16,6 @@ import { registerCrashReportHandlers } from './handlers/crashreports'
 
 const APP_TITLE = 'Yayo Launcher'
 const BG_COLOR = '#f7f0e5' // keep in sync with --bg in src/static/styles/_variables.scss
-
 let mainWindow: BrowserWindow | null = null
 
 if (process.env.VITE_DEV_SERVER_URL) {
@@ -37,6 +36,8 @@ function createWindow() {
     title: APP_TITLE,
     autoHideMenuBar: true,
     backgroundColor: BG_COLOR,
+    // Windows/Linux: frameless, the renderer draws its own window controls (native overlay hover color can't be themed)
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden' as const } : { frame: false }),
     show: false,
     icon: path.join(__dirname, '../build/icon.png'),
     webPreferences: {
@@ -65,6 +66,17 @@ function createWindow() {
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
+}
+
+function registerWindowHandlers() {
+  const win = (event: Electron.IpcMainInvokeEvent) => BrowserWindow.fromWebContents(event.sender)
+  ipcMain.handle('window:minimize', (event) => win(event)?.minimize())
+  ipcMain.handle('window:toggle-maximize', (event) => {
+    const w = win(event)
+    if (w?.isMaximized()) w.unmaximize()
+    else w?.maximize()
+  })
+  ipcMain.handle('window:close', (event) => win(event)?.close())
 }
 
 function configureAppMenu() {
@@ -135,6 +147,7 @@ app.whenReady().then(() => {
     registerUpdaterHandlers()
     const crashReports = registerCrashReportHandlers(mainWindow)
     registerLauncherHandlers(mainWindow, { stats, crashReports })
+    registerWindowHandlers()
     registerSettingsHandlers()
   }
 })

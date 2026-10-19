@@ -142,6 +142,11 @@ contextBridge.exposeInMainWorld('api', {
     set: (s: IGameSettings): Promise<boolean> => ipcRenderer.invoke('settings:set', s),
     pickJava: (): Promise<string | null> => ipcRenderer.invoke('settings:pick_java')
   },
+  window: {
+    minimize: (): Promise<void> => ipcRenderer.invoke('window:minimize'),
+    toggleMaximize: (): Promise<void> => ipcRenderer.invoke('window:toggle-maximize'),
+    close: (): Promise<void> => ipcRenderer.invoke('window:close')
+  },
   system: {
     getInfo: (): Promise<ISystemInfo> => ipcRenderer.invoke('system:info')
   }

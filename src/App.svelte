@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import logger from 'electron-log/renderer'
-  import { auth, background, maintenance, updater } from './ipc'
+  import { appWindow, auth, background, maintenance, updater } from './ipc'
   import { blocking, launcherReady, overlay, page, requestedProfile, type BlockingState } from './renderer/stores'
   import { loadSessionAssets } from './renderer/session'
   import LoginView from './renderer/LoginView.svelte'
@@ -11,6 +11,10 @@
   import DialogHost from './renderer/DialogHost.svelte'
   import CrashReportPrompt from './renderer/CrashReportPrompt.svelte'
   import defaultBackground from './static/images/bg.png'
+  import logo from './static/images/titlebar-icon.png'
+
+  const isMac = navigator.userAgent.includes('Mac')
+  const hasControls = !isMac
 
   const UPDATE_CHECK_TIMEOUT = 10_000
   const UPDATE_INSTALL_TIMEOUT = 30_000
@@ -190,6 +194,19 @@
     </div>
   </div>
 {/if}
+
+<div class="titlebar" class:mac={isMac}>
+  <img src={logo} alt="" />
+  <span>Yayo Launcher</span>
+  {#if hasControls}
+    <span class="spacer"></span>
+    <div class="win-controls">
+      <button type="button" aria-label="최소화" onclick={() => appWindow.minimize()}><i class="fa-solid fa-minus"></i></button>
+      <button type="button" aria-label="최대화" onclick={() => appWindow.toggleMaximize()}><i class="fa-solid fa-window-maximize"></i></button>
+      <button type="button" class="close" aria-label="닫기" onclick={() => appWindow.close()}><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  {/if}
+</div>
 
 <div id="app">
   <div class="app-background" style:background-image={`url('${applicationBackground}')`}></div>

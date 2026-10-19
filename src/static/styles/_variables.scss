@@ -76,6 +76,7 @@
 
   /* Layout */
   --sidebar-width: 400px;
+  --titlebar-height: 32px; /* keep in sync with titleBarOverlay.height in electron/main.ts */
 
   /* UI System */
   --btn-radius: 0;
