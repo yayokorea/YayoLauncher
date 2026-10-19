@@ -67,8 +67,8 @@
       settings = saved
       version = `Yayo Launcher v${info.version}`
       maxMemory = Math.max(1, Math.min(info.totalMem, 16))
-      minMemory = Math.min(saved.memory.min, maxMemory - RAM_STEP)
-      maxAllocated = Math.min(Math.max(saved.memory.max, minMemory + RAM_STEP), maxMemory)
+      minMemory = Math.min(saved.memory.min, maxMemory)
+      maxAllocated = Math.min(Math.max(saved.memory.max, minMemory), maxMemory)
       availableResolutions = [
         resolutions[0],
         ...resolutions.slice(1).filter((item) => item.width <= info.resolution.width && item.height <= info.resolution.height)
@@ -122,13 +122,15 @@
   })
 
   function setMinMemory(event: Event & { currentTarget: HTMLInputElement }) {
-    minMemory = Math.max(RAM_STEP, Math.min(event.currentTarget.valueAsNumber, maxAllocated - RAM_STEP))
-    event.currentTarget.value = String(minMemory)
+    // Min and max may be equal; dragging min past max pushes max along with it.
+    minMemory = Math.max(RAM_STEP, Math.min(event.currentTarget.valueAsNumber, maxMemory))
+    if (minMemory > maxAllocated) maxAllocated = minMemory
   }
 
   function setMaxMemory(event: Event & { currentTarget: HTMLInputElement }) {
-    maxAllocated = Math.min(maxMemory, Math.max(event.currentTarget.valueAsNumber, minMemory + RAM_STEP))
-    event.currentTarget.value = String(maxAllocated)
+    // Dragging max below min pushes min down with it.
+    maxAllocated = Math.min(maxMemory, Math.max(event.currentTarget.valueAsNumber, RAM_STEP))
+    if (maxAllocated < minMemory) minMemory = maxAllocated
   }
 
   function scrollToTop() {

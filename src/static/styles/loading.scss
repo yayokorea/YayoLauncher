@@ -4,10 +4,11 @@ div.loading-card {
   align-items: center;
   justify-content: center;
   height: 100%;
+  font-weight: 800;
 
   .spinner {
     font-size: 2rem;
-    color: var(--primary-text);
+    color: var(--text-main);
     margin-bottom: 1rem;
   }
 

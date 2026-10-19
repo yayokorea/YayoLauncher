@@ -26,7 +26,8 @@
 <div id="view-login" class="view">
   <div class="login-card">
     <img src={logo} class="logo" alt="로고" />
-    <h1>환영합니다</h1>
+    <h1 class="wordmark"><span>Yayo</span><em>Launcher</em></h1>
+    <p class="welcome">환영합니다</p>
     <p class="subtitle">계정을 확인하려면 로그인해 주세요.</p>
 
     <button class="btn btn-microsoft" disabled={connecting} onclick={login}>

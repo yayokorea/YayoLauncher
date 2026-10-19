@@ -8,10 +8,8 @@
   position: relative;
   width: 400px;
   background: var(--surface-2);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  box-shadow: 0 25px 50px rgba(var(--ink-rgb), 0.25);
-  overflow: hidden;
+  border: var(--edge) solid var(--edge-color);
+  box-shadow: var(--block-shadow-lg);
 }
 
 /* --- CONTENT AREA --- */
@@ -36,7 +34,7 @@
 
   label {
     display: block;
-    font-weight: 400;
+    font-weight: 700;
     margin-top: 15px;
     margin-bottom: 8px;
     color: var(--text-secondary);
@@ -45,18 +43,9 @@
 
   input[type='password'] {
     width: 100%;
-    background: var(--surface-1);
-    border: 1px solid var(--border-strong);
-    color: var(--text-main);
     padding: 10px;
-    border-radius: var(--btn-radius);
     outline: none;
     font-family: var(--font);
-    transition: border-color 0.2s;
-
-    &:focus {
-      border-color: var(--primary-text);
-    }
   }
 
   p.error-message {
@@ -67,6 +56,6 @@
 
   .unlock-profile-btn-submit {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 24px;
   }
 }

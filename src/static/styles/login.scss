@@ -5,22 +5,29 @@
 
 .login-card {
   width: 380px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  background: var(--surface-3);
+  border: var(--edge) solid var(--edge-color);
   padding: 40px;
   text-align: center;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--block-shadow-lg);
 
   .logo {
+    display: block;
     width: 80px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 2px 8px rgba(var(--ink-rgb), 0.2));
+    margin: 0 auto 20px;
+    image-rendering: pixelated;
+    filter: drop-shadow(4px 4px 0 rgba(var(--ink-rgb), 0.4));
   }
 
   h1 {
-    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .welcome {
+    font-size: 20px;
+    font-weight: 800;
     margin-bottom: 5px;
   }
 

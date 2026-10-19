@@ -3,15 +3,23 @@ div.maintenance-card {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: auto;
+  min-width: 360px;
+  max-width: 480px;
+  padding: 36px 40px;
+  text-align: center;
+  background: var(--surface-3);
+  border: var(--edge) solid var(--edge-color);
+  box-shadow: var(--block-shadow-lg);
 
   h3 {
     font-size: 21px;
+    letter-spacing: 0.06em;
   }
 
   .gears {
-    font-size: 2rem;
-    color: var(--primary-text);
+    font-size: 2.4rem;
+    color: var(--text-main);
     margin-bottom: 1rem;
   }
 

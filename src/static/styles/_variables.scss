@@ -78,5 +78,11 @@
   --sidebar-width: 400px;
 
   /* UI System */
-  --btn-radius: 5px;
+  --btn-radius: 0;
+
+  /* Block style: hard edges and stepped shadows */
+  --edge: 3px;
+  --edge-color: var(--text-main);
+  --block-shadow: 0 4px 0 var(--edge-color);
+  --block-shadow-lg: 6px 6px 0 var(--edge-color);
 }

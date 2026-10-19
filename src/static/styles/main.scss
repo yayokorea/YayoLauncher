@@ -111,7 +111,32 @@ body.loaded #app {
   }
 }
 
-/* --- GLOBAL BUTTON SYSTEM --- */
+/* --- SCROLLBAR (block style) --- */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-4);
+  border-left: 2px solid var(--edge-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border: 2px solid var(--edge-color);
+  box-shadow: inset -3px -3px 0 rgba(var(--ink-rgb), 0.18);
+
+  &:hover {
+    background: var(--brand-cream);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--surface-4);
+}
+
+/* --- GLOBAL BUTTON SYSTEM (block style) --- */
 
 .btn {
   display: inline-flex;
@@ -119,22 +144,41 @@ body.loaded #app {
   justify-content: center;
   gap: 10px;
   padding: 10px 20px;
+  margin-bottom: 4px;
 
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 800;
   text-decoration: none;
+  letter-spacing: 0.02em;
 
+  background: var(--surface-3);
+  color: var(--text-main);
   border-radius: var(--btn-radius);
-  border: 1px solid transparent;
+  border: var(--edge) solid var(--edge-color);
+  box-shadow: var(--block-shadow);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background 0.12s,
+    transform 0.08s,
+    box-shadow 0.08s;
 
   /* Disable selection */
   user-select: none;
 
+  &:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--brand-ink);
+    text-decoration: none;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 var(--edge-color);
+  }
+
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 }
@@ -143,72 +187,60 @@ body.loaded #app {
 .btn-primary {
   background: var(--primary);
   color: var(--on-primary);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
 
   &:hover:not(:disabled) {
     background: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(var(--primary-rgb), 0.4);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
   }
 }
 
 /* Secondary Button (Cream) */
 .btn-secondary {
   background: var(--surface-1);
-  border: 1px solid var(--overlay-10);
-  color: var(--text-secondary);
+  color: var(--text-main);
 
   &:hover:not(:disabled) {
-    background: var(--surface-3);
-    border-color: rgba(var(--secondary-rgb), 0.6);
-    color: var(--text-main);
-    text-decoration: none;
+    background: var(--primary);
+    color: var(--on-primary);
   }
 }
 
 /* Danger Button (Red) */
 .btn-danger {
-  background: rgba(var(--danger-rgb), 0.1);
-  border: 1px solid rgba(var(--danger-rgb), 0.5);
+  background: var(--surface-1);
   color: var(--danger-text);
 
   &:hover:not(:disabled) {
-    background: rgba(var(--danger-rgb), 0.2);
-    border-color: var(--danger);
+    background: var(--danger);
+    color: var(--brand-cream);
   }
 }
 
-/* Icon Button (Square/Round for icons only) */
+/* Icon Button (Square, icons only) */
 .btn-icon-only {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
-  border-radius: 50%;
-  /* Circle */
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid transparent;
-
-  &:hover {
-    background: var(--overlay-10);
-    color: var(--text-main);
-    text-decoration: none;
-  }
+  background: var(--surface-1);
+  color: var(--text-main);
 }
 
 /* Link Button (Looks like text, behaves like button) */
 .btn-text {
   background: transparent;
+  border-color: transparent;
+  box-shadow: none;
   padding: 5px 10px;
-  color: var(--text-muted);
+  margin: 0;
+  color: var(--primary-text);
+  text-decoration: underline;
 
-  &:hover {
-    color: var(--secondary-text);
-    background: rgba(var(--secondary-rgb), 0.12);
+  &:hover:not(:disabled) {
+    background: transparent;
+    color: var(--primary-text-hover);
+  }
+
+  &:active:not(:disabled) {
+    transform: none;
   }
 }
 
@@ -216,11 +248,68 @@ body.loaded #app {
 .btn-microsoft {
   background: var(--surface-1);
   color: var(--text-main);
-  border: 1px solid var(--border-strong);
   width: 100%;
 
-  &:hover {
-    background: var(--surface-3);
-    border-color: var(--border-hover);
+  &:hover:not(:disabled) {
+    background: var(--primary);
+    color: var(--on-primary);
+  }
+}
+
+/* --- BLOCK FORM CONTROLS --- */
+select,
+input[type='text'],
+input[type='password'] {
+  background: var(--surface-1);
+  color: var(--text-main);
+  border: var(--edge) solid var(--edge-color);
+  border-radius: 0;
+  box-shadow: inset 3px 3px 0 rgba(var(--ink-rgb), 0.12);
+  font-weight: 600;
+
+  &:focus {
+    background: var(--brand-cream);
+    border-color: var(--primary-text);
+  }
+}
+
+select {
+  cursor: pointer;
+}
+
+/* --- BLOCK SURFACES (modals, cards) --- */
+.block-panel {
+  background: var(--surface-3);
+  border: var(--edge) solid var(--edge-color);
+  box-shadow: var(--block-shadow-lg);
+  border-radius: 0;
+}
+
+/* --- WORDMARK --- */
+.wordmark {
+  display: inline-flex;
+  align-items: stretch;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+
+  span,
+  em {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    font-style: normal;
+    border: var(--edge) solid var(--edge-color);
+  }
+
+  span {
+    background: var(--text-main);
+    color: var(--brand-cream);
+  }
+
+  em {
+    margin-left: calc(var(--edge) * -1);
+    background: var(--accent);
+    color: var(--brand-ink);
   }
 }

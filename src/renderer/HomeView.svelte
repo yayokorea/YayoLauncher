@@ -5,6 +5,7 @@
   import logger from 'electron-log/renderer'
   import type { IProfile } from 'eml-lib'
   import { game, news as newsApi, profiles as profilesApi, server, settings as settingsApi } from '../ipc'
+  import logo from '../static/images/logo.png'
   import { account, avatar, get as getStoreValue, overlay, profileTokens, profiles, requestedProfile, selectedProfile, showDialog } from './stores'
 
   type NewsFeedItem = {
@@ -37,6 +38,20 @@
   let downloaded = $state<Record<string, number>>({})
   let statusRequest = 0
   let profileRequest = 0
+
+  const SEEN_KEY = 'news-last-seen'
+  let newsOpen = $state(false)
+  let lastSeen = $state(localStorage.getItem(SEEN_KEY))
+  const latestKey = $derived(newsItems[0] ? (newsItems[0].id ?? String(newsItems[0].createdAt)) : null)
+  const hasNew = $derived(!!latestKey && latestKey !== lastSeen)
+
+  function setNewsOpen(open: boolean) {
+    newsOpen = open
+    if (open && latestKey) {
+      lastSeen = latestKey
+      localStorage.setItem(SEEN_KEY, latestKey)
+    }
+  }
 
   marked.use({
     renderer: {
@@ -232,129 +247,127 @@ Ready to launch the game with the following settings:
   })
 </script>
 
-<div id="view-home" class="view">
-  <aside class="home-sidebar">
-    <div class="sidebar-top">
-      <div class="user-profile">
-        <img src={$avatar?.url ?? 'https://minotar.net/avatar/steve/256.png'} id="user-avatar" alt="스킨" />
-        <div class="user-details"><span id="user-name">{$account?.name ?? ''}</span></div>
-      </div>
+{#snippet accountChip()}
+  <div class="hv-account">
+    <img src={$avatar?.url ?? 'https://minotar.net/avatar/steve/256.png'} alt="스킨" />
+    <span>{$account?.name ?? ''}</span>
+  </div>
+{/snippet}
 
-      <button class="btn btn-secondary" title="설정" aria-label="설정" onclick={() => overlay.set('settings')}
-        ><i class="fa-fw fa-solid fa-gear"></i></button
-      >
+{#snippet settingsButton()}
+  <button class="hv-icon-btn" title="설정" aria-label="설정" onclick={() => overlay.set('settings')}><i class="fa-fw fa-solid fa-gear"></i></button>
+{/snippet}
+
+{#snippet socialLinks()}
+  <a href="https://discord.yayokorea.net" target="_blank" rel="noreferrer" class="hv-icon-btn" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+  <a href="https://mc.yayokorea.net" target="_blank" rel="noreferrer" class="hv-icon-btn" aria-label="웹사이트"><i class="fa-solid fa-globe"></i></a>
+{/snippet}
+
+{#snippet profileSelect()}
+  <div class="hv-profile" class:open={profileMenuOpen} bind:this={profileSelector}>
+    <button class="hv-profile-current" aria-expanded={profileMenuOpen} onclick={() => (profileMenuOpen = !profileMenuOpen)}>
+      <span>{$selectedProfile?.name ?? '프로필 선택'}</span><i class="fa-solid fa-chevron-down"></i>
+    </button>
+    {#if profileMenuOpen}
+      <div class="hv-profile-list">
+        {#each $profiles as item (item.slug)}
+          <button class="hv-profile-option" class:active={$selectedProfile?.slug === item.slug} onclick={() => chooseProfile(item)}>
+            {#if item.visibility === 'PROTECTED'}<i class="fa-fw fa-solid" class:fa-lock={!$profileTokens[item.slug]} class:fa-lock-open={!!$profileTokens[item.slug]}></i>{/if}
+            <span>{item.name}</span>
+          </button>
+        {/each}
+        {#if !$profiles.length}<span class="hv-profile-empty">사용 가능한 프로필이 없습니다.</span>{/if}
+      </div>
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet serverStatus()}
+  <div class="hv-status">
+    <span class="hv-dot" class:pinging={serverState === 'pinging'} class:online={serverState === 'online'} class:offline={serverState === 'offline'}></span>
+    <span>{serverState === 'pinging' ? '확인 중...' : serverState === 'online' ? '온라인' : '오프라인'}</span>
+    {#if players}<span class="hv-players"><i class="fa-fw fa-solid fa-users"></i>{players}</span>{/if}
+  </div>
+{/snippet}
+
+{#snippet playArea()}
+  {#if !launch.visible}
+    <button class="hv-play" onclick={startGame}><i class="fa-solid fa-play"></i><span>플레이</span></button>
+  {:else}
+    <div class="hv-progress">
+      <div class="hv-progress-info">
+        <span>{launch.label}</span>
+        <span>{launch.percent === null ? '' : `${Math.round(launch.percent)}%`}</span>
+      </div>
+      <div class="hv-progress-bg">
+        <div class="hv-progress-fill" class:indeterminate={launch.indeterminate} style:width={launch.percent === null ? undefined : `${launch.percent}%`}></div>
+      </div>
     </div>
+  {/if}
+{/snippet}
 
-    <div class="sidebar-bottom">
-      <div class="profile-selector-container" class:open={profileMenuOpen} bind:this={profileSelector}>
-        <button class="selected-profile" aria-expanded={profileMenuOpen} onclick={() => (profileMenuOpen = !profileMenuOpen)}>
-          <span id="current-profile-name">{$selectedProfile?.name ?? '프로필 선택'}</span><i class="fa-solid fa-chevron-down"></i>
-        </button>
-        {#if profileMenuOpen}
-          <div class="profile-dropdown" id="profile-dropdown">
-            {#each $profiles as item (item.slug)}
-              <button class="profile-option" class:active={$selectedProfile?.slug === item.slug} onclick={() => chooseProfile(item)}>
-                {#if item.visibility === 'PROTECTED'}<i
-                    class="fa-fw fa-solid"
-                    class:fa-lock={!$profileTokens[item.slug]}
-                    class:fa-lock-open={!!$profileTokens[item.slug]}
-                  ></i>&nbsp;&nbsp;{/if}{item.name}
-              </button>
+{#snippet newsList()}
+  {#if newsLoading}
+    <div class="hv-news-empty">뉴스를 불러오는 중...</div>
+  {:else if newsError}
+    <div class="hv-news-empty"><span>뉴스를 불러오지 못했습니다.</span> <button class="hv-link" onclick={loadNews}>다시 시도</button></div>
+  {:else if !newsItems.length}
+    <div class="hv-news-empty">표시할 뉴스가 없습니다.</div>
+  {:else}
+    {#each newsItems as item (item.id ?? String(item.createdAt))}
+      <article class="hv-card">
+        {#if item.image}
+          <img class="hv-card-image" src={item.image} alt="뉴스 이미지" onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')} />
+        {/if}
+        <div class="hv-card-body">
+          <div class="hv-card-tags">
+            {#each item.tags ?? [] as tag}
+              <span class="hv-tag" style:color={tagColor(tag.color)} style:background-color={tagBackground(tag.color)}>{tag.name ?? tag.title ?? ''}</span>
             {/each}
-            {#if !$profiles.length}<span class="profile-option empty">사용 가능한 프로필이 없습니다.</span>{/if}
           </div>
-        {/if}
-      </div>
-
-      <div class="server-status">
-        <div class="status-indicator" id="server-status-indicator">
-          <div
-            class="status-dot"
-            class:pinging={serverState === 'pinging'}
-            class:online={serverState === 'online'}
-            class:offline={serverState === 'offline'}
-          ></div>
-          <span class="status-text">{serverState === 'pinging' ? '확인 중...' : serverState === 'online' ? '온라인' : '오프라인'}</span>
-        </div>
-        <div class="player-count">
-          {#if players}<i class="fa-fw fa-solid fa-users"></i>&nbsp;&nbsp;{players}{/if}
-        </div>
-      </div>
-
-      <div class="launch-area">
-        {#if !launch.visible}
-          <button id="btn-play" onclick={startGame}>플레이</button>
-        {:else}
-          <div class="progress-container" id="launch-progress-container">
-            <div class="progress-info">
-              <span>{launch.label}</span>
-              <span>{launch.percent === null ? '' : `${Math.round(launch.percent)}%`}</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div
-                class="progress-bar-fill"
-                class:indeterminate={launch.indeterminate}
-                style:width={launch.percent === null ? undefined : `${launch.percent}%`}
-              ></div>
-            </div>
+          <h3>{item.title}</h3>
+          <div class="hv-card-meta">
+            <img src={`https://minotar.net/helm/${item.author.username ?? 'steve'}/24`} alt="작성자" />
+            <span>{item.author.username ?? '운영팀'}</span>
+            <span>·</span>
+            <span>{formatDate(item.createdAt)}</span>
           </div>
-        {/if}
-      </div>
+          <div class="hv-card-content">{@html renderMarkdown(item.content)}</div>
+        </div>
+      </article>
+    {/each}
+  {/if}
+{/snippet}
+
+{#snippet newDot()}<b class="hv-new" role="img" aria-label="새 소식"></b>{/snippet}
+
+<svelte:window onkeydown={(event) => event.key === 'Escape' && newsOpen && setNewsOpen(false)} />
+
+<!-- Minecraft title-screen style menu with a collapsible news drawer -->
+<div class="view hv" class:hv-open={newsOpen}>
+  <section class="hv-menu">
+    <div class="hv-brand">
+      <img class="hv-logo" src={logo} alt="" />
+      <h1 class="wordmark"><span>Yayo</span><em>Launcher</em></h1>
+    </div>
+    <div class="hv-menu-stack">
+      {@render playArea()}
+      {@render profileSelect()}
+      <div class="hv-menu-row">{@render settingsButton()}{@render socialLinks()}</div>
+      {@render serverStatus()}
+    </div>
+    {@render accountChip()}
+  </section>
+
+  <aside class="hv-drawer" class:open={newsOpen}>
+    <button class="hv-drawer-tab" aria-expanded={newsOpen} aria-controls="hv-drawer-panel" onclick={() => setNewsOpen(!newsOpen)}>
+      <i class="fa-solid" class:fa-chevron-left={!newsOpen} class:fa-chevron-right={newsOpen}></i>
+      <span>뉴스</span>
+      {#if hasNew}{@render newDot()}{/if}
+    </button>
+    <div class="hv-panel" id="hv-drawer-panel" inert={!newsOpen}>
+      <h2>뉴스</h2>
+      <div class="hv-news-list">{@render newsList()}</div>
     </div>
   </aside>
-
-  <main class="home-content">
-    <div class="news-header">
-      <h2>뉴스</h2>
-      <div class="social-links">
-        <a href="https://discord.yayokorea.net" target="_blank" rel="noreferrer" class="btn btn-icon-only" aria-label="Discord"
-          ><i class="fa-brands fa-discord"></i></a
-        >
-        <a href="https://mc.yayokorea.net" target="_blank" rel="noreferrer" class="btn btn-icon-only" aria-label="웹사이트"
-          ><i class="fa-solid fa-globe"></i></a
-        >
-      </div>
-    </div>
-
-    <hr />
-
-    <div class="news-list" id="news-list">
-      {#if newsLoading}
-        <div class="news-empty">뉴스를 불러오는 중...</div>
-      {:else if newsError}
-        <div class="news-empty">
-          <span>뉴스를 불러오지 못했습니다.</span> <button class="btn btn-text" onclick={loadNews}>다시 시도</button>
-        </div>
-      {:else if !newsItems.length}
-        <div class="news-empty">표시할 뉴스가 없습니다.</div>
-      {:else}
-        {#each newsItems as item (item.id ?? String(item.createdAt))}
-          <article class="news-article">
-            <div class="article-meta">
-              <div class="author">
-                <img src={`https://minotar.net/helm/${item.author.username ?? 'steve'}/24`} alt="작성자" />
-                <span>{item.author.username ?? '운영팀'}</span>
-              </div>
-              <span class="separator">•</span>
-              <span class="date">{formatDate(item.createdAt)}</span>
-              <span class="separator">•</span>
-              <div class="tags-container">
-                {#each item.tags ?? [] as tag}
-                  <span class="tag" style:color={tagColor(tag.color)} style:background-color={tagBackground(tag.color)}>{tag.name ?? tag.title ?? ''}</span>
-                {/each}
-              </div>
-            </div>
-
-            <h3>{item.title}</h3>
-
-            {#if item.image}
-              <img src={item.image} alt="뉴스 이미지" onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')} />
-            {/if}
-
-            <div class="article-content">{@html renderMarkdown(item.content)}</div>
-          </article>
-        {/each}
-      {/if}
-    </div>
-  </main>
 </div>
