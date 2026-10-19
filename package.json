@@ -34,6 +34,7 @@
     "files": [
       "dist",
       "dist-electron",
+      "build/icon.png",
       "src/static/fonts/PRETENDARD-LICENSE.txt",
       "package.json",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
@@ -79,8 +80,6 @@
       "identity": null,
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
       "artifactName": "${productName}-${version}.${ext}"
     },
     "dmg": {
