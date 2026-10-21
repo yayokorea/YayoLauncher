@@ -460,9 +460,11 @@
     top: 28px;
     right: 0;
     bottom: 32px;
+    width: var(--news-w);
     display: flex;
     align-items: flex-start;
-    transform: translateX(var(--news-w));
+    // Percentages follow the panel width immediately when the window resizes.
+    transform: translateX(100%);
     transition: transform 0.25s steps(6);
 
     &.open {
@@ -471,13 +473,15 @@
 
     .hv-panel {
       align-self: stretch;
-      width: var(--news-w);
+      width: 100%;
       box-shadow: none;
       border-right: none;
     }
   }
 
   .hv-drawer-tab {
+    position: absolute;
+    right: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
