@@ -1,9 +1,8 @@
 # AGENTS.md
 
-## Stack
+Electron · Vite · Svelte 5 · TypeScript · SCSS.
 
-Electron, Vite, Svelte 5, TypeScript, SCSS
-
-## Commands
-
-`npm install` `npm run dev` `npm run build` `npm run release:win` `npm run release:mac` `npm run release:lin`
+- Setup: `npm ci`
+- Dev: `npm run dev`
+- Check/build: `npm run build`
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [ARCHITECTURE.md](ARCHITECTURE.md) for structure, and [DESIGN.md](DESIGN.md) for UI.

@@ -1,32 +1,40 @@
 # Yayo Launcher
 
-Modded Minecraft launcher, powered by [EML Lib](https://github.com/Electron-Minecraft-Launcher/EML-Lib) and configured through an [EML AdminTool](https://github.com/Electron-Minecraft-Launcher/EML-AdminTool) instance.
+A modded Minecraft launcher built with Electron and Svelte, powered by [EML Lib](https://github.com/Electron-Minecraft-Launcher/EML-Lib).
 
-![YayoLauncher](./.github/assets/screenshot.png)
+![Yayo Launcher](.github/assets/screenshot.png)
+
+## Download
+
+Download an installer from [Releases](https://github.com/yayokorea/YayoLauncher/releases).
+
+- Windows: `.exe`
+- macOS: `.dmg`
+- Linux: `.AppImage`, `.deb`, or `.rpm`
+
+Automatic updates are available for Windows and Linux AppImage installations. Update macOS, Debian, and RPM installations manually.
 
 ## Development
 
-Requires Node.js 18 or higher.
+Use Node.js 22.x and npm.
 
-```bash
-npm install
+```sh
+npm ci
 npm run dev
 ```
 
-The AdminTool URL is set in `electron/const.ts`.
+See [Contributing](CONTRIBUTING.md) for configuration, build, and packaging instructions.
 
-## Build
+## Documentation
 
-| Platform | Command               | Output format               |
-| -------- | --------------------- | --------------------------- |
-| Windows  | `npm run release:win` | `.exe` (NSIS Installer)     |
-| macOS    | `npm run release:mac` | `.dmg` (Disk Image)         |
-| Linux    | `npm run release:lin` | `.AppImage`, `.deb`, `.rpm` |
+- [Contributing](CONTRIBUTING.md)
+- [Architecture](ARCHITECTURE.md)
+- [Design](DESIGN.md)
 
-Compiled files are written to the `release/` folder.
+Report bugs and request features through [Issues](https://github.com/yayokorea/YayoLauncher/issues). For bugs, include the launcher version, operating system, reproduction steps, expected behavior, and actual behavior. Remove credentials and personal information from logs.
 
 ## License
 
-MIT. See [LICENSE](./LICENSE) and [CREDITS](./CREDITS).
+[MIT](LICENSE). Based on [EML Template](https://github.com/Electron-Minecraft-Launcher/EML-Template) by GoldFrite.
 
-Based on [EML Template](https://github.com/Electron-Minecraft-Launcher/EML-Template) by GoldFrite (MIT).
+See [CREDITS](CREDITS) for third-party acknowledgments.
