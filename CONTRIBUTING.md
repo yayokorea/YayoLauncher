@@ -11,6 +11,10 @@ npm run dev
 
 The launcher connects to an [EML AdminTool](https://github.com/Electron-Minecraft-Launcher/EML-AdminTool) instance. Configure `ADMINTOOL_URL` in `electron/const.ts`.
 
+### Server access secret
+
+The game server only admits clients launched from Yayo Launcher. The launcher passes the shared secret to the game as `-Dyayo.gate.secret`. Set `VITE_YAYO_GATE_SECRET` to the `secret` in the server's YayoGate `config.yml`, in `.env.local` for local builds or the `YAYO_GATE_SECRET` repository secret for releases. Do not commit it. Without it, a local build runs but the server refuses its connection.
+
 ## Changes
 
 - Keep each pull request focused on one change.

@@ -3,14 +3,17 @@ import { Launcher } from 'eml-lib'
 import type { Account } from 'eml-lib'
 import type { IGameSettings } from './settings'
 import logger from 'electron-log/main'
-import { ADMINTOOL_URL } from '../const'
+import { ADMINTOOL_URL, GATE_SECRET } from '../const'
 import type { StatsIntegration } from './stats'
 import type { CrashReportIntegration } from './crashreports'
 
 export function registerLauncherHandlers(mainWindow: BrowserWindow, integrations: { stats: StatsIntegration; crashReports: CrashReportIntegration }) {
   ipcMain.handle('game:launch', (_event, payload: { account: Account; settings: IGameSettings; profileSlug?: string; token?: string }) => {
     const { account, settings, profileSlug } = payload
-    const java = settings.java === 'system' ? { install: 'manual' as const, absolutePath: 'java' } : { install: 'auto' as const }
+    // The yayo-gate-client mod signs the server's join challenge with this; the secret stays out of the mod jar.
+    const args = GATE_SECRET ? [`-Dyayo.gate.secret=${GATE_SECRET}`] : []
+    const java =
+      settings.java === 'system' ? { install: 'manual' as const, absolutePath: 'java', args } : { install: 'auto' as const, args }
     logger.log('Launching')
 
     const launcher = new Launcher({

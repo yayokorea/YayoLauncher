@@ -66,6 +66,8 @@ jobs:
     env:
       # The macOS build is unsigned (identity: null in package.json).
       CSC_IDENTITY_AUTO_DISCOVERY: false
+      # Shared secret for the YayoGate server plugin (config.yml `secret`).
+      VITE_YAYO_GATE_SECRET: ${{ secrets.YAYO_GATE_SECRET }}
       # Optional Windows code signing: add CSC_LINK / CSC_KEY_PASSWORD repository secrets
       # and uncomment. Not required.
       # CSC_LINK: ${{ secrets.CSC_LINK }}
