@@ -124,7 +124,7 @@
     "eml-lib": "^2.7.4",
     "marked": "^18.1.1",
     "skinview3d": "^3.4.2",
-    "svelte": "^5.57.2"
+    "svelte": "^5.57.3"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^7.3.1",
