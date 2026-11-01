@@ -122,7 +122,7 @@
     "electron-log": "^5.4.4",
     "electron-updater": "^6.8.9",
     "eml-lib": "^2.7.4",
-    "marked": "^18.1.1",
+    "marked": "^18.1.2",
     "skinview3d": "^3.4.2",
     "svelte": "^5.57.2"
   },
